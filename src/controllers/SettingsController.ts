@@ -1,10 +1,12 @@
 import { Request, Response } from 'express';
 
-import { settingsService } from '../services/SettingsService';
+import { SettingsService } from '../services/SettingsService';
 
 class SettingsController {
   async create(request: Request, response: Response): Promise<Response> {
     const { chat, username } = request.body;
+
+    const settingsService = new SettingsService();
 
     try {
       const setting = await settingsService.create({ chat, username });
