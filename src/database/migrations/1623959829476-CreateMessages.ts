@@ -1,4 +1,9 @@
-import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import {
+  MigrationInterface,
+  QueryRunner,
+  Table,
+  TableForeignKey,
+} from 'typeorm';
 
 export class CreateMessages1623959829476 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -30,21 +35,24 @@ export class CreateMessages1623959829476 implements MigrationInterface {
             default: 'now()',
           },
         ],
-        foreignKeys: [
-          {
-            name: 'FKUser',
-            referencedTableName: 'users',
-            referencedColumnNames: ['id'],
-            columnNames: ['user_id'],
-            onDelete: 'SET NULL',
-            onUpdate: 'SET NULL',
-          },
-        ],
+      }),
+    );
+
+    await queryRunner.createForeignKey(
+      'messages',
+      new TableForeignKey({
+        name: 'FKMessagesUser',
+        referencedTableName: 'users',
+        referencedColumnNames: ['id'],
+        columnNames: ['user_id'],
+        onDelete: 'SET NULL',
+        onUpdate: 'SET NULL',
       }),
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.dropForeignKey('messages', 'FKMessagesUser');
     await queryRunner.dropTable('messages');
   }
 }
