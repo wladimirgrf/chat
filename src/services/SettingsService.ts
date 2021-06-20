@@ -3,7 +3,7 @@ import { Setting } from '../entities/Setting';
 
 import { SettingsRepository } from '../repositories/SettingsRepository';
 
-interface ISettingCreate {
+interface ISetting {
   chat: boolean;
   username: string;
 }
@@ -15,7 +15,7 @@ class SettingsService {
     this.settingsRepository = getCustomRepository(SettingsRepository);
   }
 
-  async create({ chat, username }: ISettingCreate): Promise<Setting> {
+  async create({ chat, username }: ISetting): Promise<Setting> {
     const userAlreadyExists = await this.settingsRepository.findOne({
       username,
     });
@@ -32,6 +32,21 @@ class SettingsService {
     await this.settingsRepository.save(setting);
 
     return setting;
+  }
+
+  async findByUsername(username: string): Promise<Setting> {
+    const setting = await this.settingsRepository.findOne({ username });
+
+    return setting;
+  }
+
+  async update({ chat, username }: ISetting): Promise<void> {
+    await this.settingsRepository
+      .createQueryBuilder()
+      .update(Setting)
+      .set({ chat })
+      .where('username=:username', { username })
+      .execute();
   }
 }
 
