@@ -19,4 +19,23 @@ document.querySelector('#start_chat').addEventListener('click', event => {
       }
     });
   });
+
+  socket.on('client_list_all_messages', messages => {
+    let template;
+    let params;
+
+    messages.forEach(message => {
+      if (!message.adminId) {
+        template = document.getElementById('message-user-template').innerHTML;
+        params = { message: message.text, email };
+      } else {
+        template = document.getElementById('admin-template').innerHTML;
+        params = { message_admin: message.text };
+      }
+
+      const rendered = Mustache.render(template, params);
+
+      document.getElementById('messages').innerHTML += rendered;
+    });
+  });
 });
