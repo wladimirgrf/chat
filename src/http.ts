@@ -21,6 +21,10 @@ app.get('/', (request, response) => {
   return response.render('html/client.html');
 });
 
+app.get('/admin', (request, response) => {
+  return response.render('html/admin.html');
+});
+
 const http = createServer(app);
 const io = new Server(http);
 
