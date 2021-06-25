@@ -1,9 +1,16 @@
 const socket = io();
 
+const template = document.getElementById('template').innerHTML;
+const adminTemplate = document.getElementById('admin_template').innerHTML;
+const adminMessageTemplate = document.getElementById(
+  'admin_message_template',
+).innerHTML;
+const clientMessageTemplate = document.getElementById(
+  'client_message_template',
+).innerHTML;
+
 socket.on('admin_list_all_users', connections => {
   document.getElementById('list_users').innerHTML = '';
-
-  const template = document.getElementById('template').innerHTML;
 
   connections.forEach(connection => {
     const rendered = Mustache.render(template, {
@@ -17,15 +24,7 @@ socket.on('admin_list_all_users', connections => {
 });
 
 function call(userId, email) {
-  const template = document.getElementById('admin_template').innerHTML;
-  const adminMessageTemplate = document.getElementById(
-    'admin_message_template',
-  ).innerHTML;
-  const clientMessageTemplate = document.getElementById(
-    'client_message_template',
-  ).innerHTML;
-
-  const rendered = Mustache.render(template, {
+  const rendered = Mustache.render(adminTemplate, {
     email,
     id: userId,
   });
@@ -57,4 +56,26 @@ function call(userId, email) {
       divMessages.innerHTML += messageRendered;
     });
   });
+}
+
+function sendMessage(id) {
+  const text = document.getElementById(`send_message_${id}`);
+
+  const params = {
+    text: text.value,
+    userId: id,
+  };
+
+  socket.emit('admin_send_message', params);
+
+  const divMessages = document.getElementById(`allMessages${id}`);
+
+  const messageRendered = Mustache.render(adminMessageTemplate, {
+    message: params.text,
+    date: dayjs().format('DD/MM/YYYY HH:mm:ss'),
+  });
+
+  divMessages.innerHTML += messageRendered;
+
+  text.value = '';
 }
