@@ -4,28 +4,6 @@ let emailUser = null;
 const userTemplate = document.getElementById('message-user-template').innerHTML;
 const adminTemplate = document.getElementById('admin-template').innerHTML;
 
-document
-  .getElementById('send_message_button')
-  .addEventListener('click', event => {
-    const text = document.getElementById('message_user');
-
-    const params = {
-      text,
-      socketAdminId,
-    };
-
-    socket.emit('client_send_to_admin', params);
-
-    const template = userTemplate;
-
-    const rendered = Mustache.render(template, {
-      message: text.value,
-      email: emailUser,
-    });
-
-    document.getElementById('messages').innerHTML += rendered;
-  });
-
 document.getElementById('start_chat').addEventListener('click', event => {
   const chatHelp = document.getElementById('chat_help');
   chatHelp.style.display = 'none';
@@ -75,4 +53,26 @@ document.getElementById('start_chat').addEventListener('click', event => {
 
     document.getElementById('messages').innerHTML += rendered;
   });
+
+  document
+    .getElementById('send_message_button')
+    .addEventListener('click', e => {
+      const messageText = document.getElementById('message_user').value;
+
+      const params = {
+        text: messageText,
+        socketAdminId,
+      };
+
+      socket.emit('client_send_to_admin', params);
+
+      const template = userTemplate;
+
+      const rendered = Mustache.render(template, {
+        message: messageText,
+        email: emailUser,
+      });
+
+      document.getElementById('messages').innerHTML += rendered;
+    });
 });

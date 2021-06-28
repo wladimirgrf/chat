@@ -79,3 +79,15 @@ function sendMessage(id) {
 
   text.value = '';
 }
+
+socket.on('admin_receive_message', params => {
+  const divMessages = document.getElementById(`allMessages${params.userId}`);
+
+  const messageRendered = Mustache.render(clientMessageTemplate, {
+    email: params.userEmail,
+    message: params.message.text,
+    date: dayjs(params.message.createdAt).format('DD/MM/YYYY HH:mm:ss'),
+  });
+
+  divMessages.innerHTML += messageRendered;
+});
