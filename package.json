@@ -1,15 +1,15 @@
 {
   "name": "chat",
   "version": "1.0.0",
-  "description": "nlw#5",
+  "description": "Project developed for the NLW#5 - Node.js",
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev src/server.ts",
     "typeorm": "ts-node-dev node_modules/typeorm/cli.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "wladimirgrf",
+  "license": "MIT",
   "dependencies": {
     "ejs": "^3.1.6",
     "express": "^4.17.1",
