@@ -10,6 +10,11 @@ interface IConnectionsCreate {
   adminId?: string;
 }
 
+interface IConnectionsUpdateAdminId {
+  userId: string;
+  adminId: string;
+}
+
 class ConnectionsService {
   private connectionsRepository: Repository<Connection>;
 
@@ -54,6 +59,18 @@ class ConnectionsService {
     });
 
     return connections;
+  }
+
+  async updateAdminIdByUser({
+    userId,
+    adminId,
+  }: IConnectionsUpdateAdminId): Promise<void> {
+    await this.connectionsRepository
+      .createQueryBuilder()
+      .update(Connection)
+      .set({ adminId })
+      .where('user_id=:userId', { userId })
+      .execute();
   }
 }
 

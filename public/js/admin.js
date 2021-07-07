@@ -31,6 +31,8 @@ function call(userId, email) {
 
   document.getElementById('supports').innerHTML += rendered;
 
+  socket.emit('admin_user_in_support', { userId });
+
   socket.emit('admin_list_messages_by_user', { userId }, messages => {
     const divMessages = document.getElementById(`allMessages${userId}`);
 
